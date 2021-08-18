@@ -28,7 +28,7 @@ def home():
 
 @app.route('/predict', methods=['GET','POST'])
 def predict():
-    pgn = request.args["pgn"]
+    pgn = request.form["pgn"]
     # parse input features from request
     #pgn = str(list(request.form.values())[0])
     pgn_io = io.StringIO(pgn)
@@ -95,11 +95,11 @@ def predict():
     data = data + openings_mask + [Other]
     
     data = np.array(data).reshape(1,-1)
-
     
     # load model and predict
     model = load_models()
     prediction = model.predict(data)[0]
+    
     #response = json.dumps({'elo': prediction})
     #return response, 200
     return render_template('index.html', prediction_text='Guessed elo : {}'.format(int(np.round(prediction))))
